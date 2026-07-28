@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script>
+            window.MathJax = {
+                tex: {
+                    inlineMath: [
+                        ['$', '$'],
+                        ['\\(', '\\)'],
+                    ],
+                },
+            };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="vga website" />
+        <meta name="author" content="zijian song" />
+        <title>Vision-Geometry-Action-Model</title>
+        <!-- Favicon-->
+        <link rel="icon" type="image/x-icon" href="assets/myfavicon.ico" />
+        <!-- Bootstrap Icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Font Awesome Icons-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <!-- Academicons Icons-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.4/css/academicons.min.css" />
+        <!-- Google fonts-->
+        <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic" rel="stylesheet" type="text/css" />
+        <!-- SimpleLightbox plugin CSS-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    <body id="page-top">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="mainNav">
+            <div class="container px-4 px-lg-5">
+                <a class="navbar-brand" href="#page-top"><i class="bi bi-house-door-fill"></i></a>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto my-2 my-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://arxiv.org/abs/2604.12908" target="_blank">
+                                <i class="ai ai-arxiv me-1"></i>
+                                ArXiv
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)" onclick="window.open(window.location.href, '_blank')">
+                                <i class="fab fa-github me-1"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" target="_blank" style="display: flex; align-items: center">
+                                <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" style="width: 18px; height: 18px; margin-right: 6px" />
+                                HuggingFace
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- 标题页-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 h-100">
+                <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
+                    <div class="col-lg-12 align-self-end">
+                        <h1 class="text-white font-weight-bold">
+                            <!-- | Robotic Manipulation is Vision-to-Geometry Mapping ($f(v) \rightarrow G$): Vision-Geometry Backbones over Language and Video Models-->
+                            <span style="color: #ffffff; font-size: 2.9rem">Robotic Manipulation is</span>
+                            <span style="color: #ff6600; font-size: 2.9rem">Vision-to-Geometry Mapping ($f(v) \rightarrow G$):</span>
+                            <span style="color: #ffffff; font-size: 2.9rem">Vision-Geometry Backbones over Language and Video Models</span>
+                        </h1>
+                        <hr class="divider" />
+                    </div>
+                    <div class="col-lg-8 align-self-baseline">
+                        <p class="text-white-75 mt-3" style="font-size: 1.1rem; line-height: 1.6; text-align: center">Zijian Song<sup>1</sup>,&nbsp;&nbsp; Qichang Li<sup>1</sup>,&nbsp;&nbsp; Jiawei Zhou<sup>1</sup>,&nbsp;&nbsp; Zhenlong Yuan<sup>4</sup>,&nbsp;&nbsp; Tianshui Chen<sup>35</sup>,&nbsp;&nbsp; Liang Lin<sup>123</sup>,&nbsp;&nbsp; Guangrun Wang<sup>123</sup>*</p>
+                        <p class="text-white-75 mt-2" style="font-size: 1rem; line-height: 1.4; text-align: center">
+                            <sup>1</sup> Sun Yat-sen University, Guangzhou, China
+                            <br />
+                            <sup>2</sup> Guangdong Key Laboratory of Big Data Analysis and Processing
+                            <br />
+                            <sup>3</sup> X-Era AI Lab
+                            <br />
+                            <sup>4</sup> AMAP, Alibaba
+                            <br />
+                            <sup>5</sup> Guangdong University of Technology, Guangzhou, China
+                        </p>
+                        <div class="text-center mt-4">
+                            <a class="btn btn-outline-light btn-xl mx-2" href="https://arxiv.org/abs/2604.12908" target="_blank">
+                                <i class="ai ai-arxiv me-2"></i>
+                                ArXiv
+                            </a>
+                            <a class="btn btn-outline-light btn-xl mx-2" href="javascript:void(0)" onclick="window.open(window.location.href, '_blank')" style="display: inline-flex; align-items: center">
+                                <i class="fab fa-github me-2"></i>
+                                GitHub
+                            </a>
+                            <a class="btn btn-outline-light btn-xl mx-2" href="javascript:void(0)" onclick="window.open(window.location.href, '_blank')" style="display: inline-flex; align-items: center">
+                                <img src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg" style="width: 22px; height: 22px; margin-right: 8px" />
+                                HuggingFace
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <section class="page-section" id="abstract" style="background-color: #f2f2f2">
+            <div class="container" style="max-width: 900px">
+                <div class="text-center">
+                    <h2 class="mt-0" style="color: #ff6600; font-weight: 800; font-size: 2.4rem; text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25)">Abstract</h2>
+                    <hr class="divider" style="border-color: #d14b6e" />
+                </div>
+                <p class="text-black mt-4" style="font-size: 1.05rem; line-height: 1.7; text-align: justify">
+                    At its core, robotic manipulation is a problem of vision-to-geometry mapping ($f(v) \rightarrow G$). Physical actions-such as reaching, grasping, and orienting-are fundamentally defined by geometric properties like 3D positions, rotations, and spatial relationships. Consequently, we argue that the foundation for generalizable robotic control should be a vision-geometry backbone, rather than the widely adopted vision-language or video models. Conventional Vision-Language-Action (VLA) and video-predictive models rely on backbones pretrained on large-scale 2D image-text or temporal pixel data. While effective, their representations are largely shaped by semantic concepts or 2D priors, which do not intrinsically align with the precise 3D geometric nature required for physical manipulation. Driven by this insight, we propose the Vision-Geometry-Action (VGA) model, which directly conditions action generation on pretrained native 3D representations. Specifically, VGA replaces conventional language or video backbones with a pretrained 3D world model, establishing a seamless vision-to-geometry mapping that translates visual inputs directly into physical actions. To further enhance geometric consistency, we introduce a Progressive Volumetric Modulation module and adopt a joint training strategy that simultaneously predicts actions and 3D properties, improving both representation fidelity and cross-modal interaction. Extensive experiments validate the effectiveness of our approach. In simulation benchmarks, VGA outperforms top-tier VLA baselines including $\pi_{0.5}$, SpatialVLA, and GeoVLA, demonstrating its superiority in precise spatial manipulation. More importantly, VGA exhibits remarkable zero-shot generalization to unseen viewpoints in real-world deployments, consistently outperforming $\pi_{0.5}$ in terms of success rate. These results highlight that operating on native 3D representations-rather than translating through language or 2D video priors-is a highly promising direction for achieving generalizable physical intelligence.
+                </p>
+            </div>
+        </section>
+        <section class="page-section bg-white" id="about">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-10 text-center">
+                        <h2 class="mt-0" style="color: #ff6600; font-weight: 800; font-size: 2.4rem; text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25)">Overview</h2>
+                        <hr class="divider" style="border-color: #d14b6e" />
+                        <img class="img-fluid" src="assets\img\overview\figure1.png" style="width: 60%" />
+                        <p class="text-black mb-4">
+                            <strong>Fig.1 Robotic manipulation as vision-to-geometry mapping ($f(v) \rightarrow G$).</strong>
+                            Physical actions like reaching, grasping, and orienting are inherently driven by geometric properties, such as 3D position, rotation, and spatial relationships. Therefore, we argue that a vision-geometry backbone provides a stronger foundation for generalizable robotic control than prevalent vision-language-models or video prediction models.
+                        </p>
+                        <hr class="divider" style="border-color: #d14b6e" />
+                        <img class="img-fluid" src="assets\img\overview\figure2.png" style="width: 70%" />
+                        <p class="text-black mb-4">
+                            <strong>Fig.2 Overview of our VGA model.</strong>
+                            (a) The left column compares our VGA framework with representative robot learning paradigms. VGA differs from them by leveraging a pretrained 3D world model as the backbone, providing native 3D representations aligned with physical actions. (b) The right column illustrates the workflow of the VGA model. Multimodal inputs are tokenized into a unified sequence and processed by a pretrained VGGT transformer with alternating attention. The resulting latent features are then mapped by task-specific heads to produce multimodal outputs, each with corresponding supervision.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="page-section bg-light-gray" id="services">
+            <div class="container px-4 px-lg-5">
+                <div class="text-center">
+                    <h2 class="mt-0" style="color: #ff6600; font-weight: 800; font-size: 2.4rem; text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25)">Results</h2>
+                    <hr class="divider" />
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <a class="col-lg-3 col-md-6 text-center" href="#simulation" style="text-decoration: none; color: inherit; cursor: pointer">
+                        <div class="mt-5">
+                            <div class="mb-2"><i class="bi-gem fs-1 text-primary"></i></div>
+                            <h3 class="h4 mb-2">
+                                Simulation
+                                <br />
+                                Experiments
+                            </h3>
+                        </div>
+                    </a>
+                    <a class="col-lg-3 col-md-6 text-center" href="#realworld" style="text-decoration: none; color: inherit; cursor: pointer">
+                        <div class="mt-5">
+                            <div class="mb-2"><i class="bi-laptop fs-1 text-primary"></i></div>
+                            <h3 class="h4 mb-2">
+                                Real-World
+                                <br />
+                                Experiments
+                            </h3>
+                        </div>
+                    </a>
+                    <a class="col-lg-3 col-md-6 text-center" href="#ablation" style="text-decoration: none; color: inherit; cursor: pointer">
+                        <div class="mt-5">
+                            <div class="mb-2"><i class="bi-globe fs-1 text-primary"></i></div>
+                            <h3 class="h4 mb-2">
+                                Ablation
+                                <br />
+                                Experiments
+                            </h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        <section class="page-section bg-white" id="simulation">
+            <div class="container px-4 px-lg-5">
+                <h2 class="text-center mt-0">Simulation Experiments</h2>
+                <hr class="divider" />
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-10 text-center">
+                        <img class="img-fluid" src="assets\img\result\simulation\libero_comparison.png" style="width: 45%; max-width: 1100px; border-radius: 10px" />
+                        <p class="text-black mt-3" style="font-size: 1.1rem">
+                            <strong>Fig.3 The success rate comparison on the LIBERO benchmark.</strong>
+                            VGA consistently outperforms representative approaches across three major paradigms: standard VLAs, 3D-VLAs, and World Action Models (WAM). Compared to strong VLA baselines such as $\pi_{0.5}$ and OpenVLA-OFT, VGA achieves higher success rates, demonstrating the advantage of grounding action prediction in native 3D representations. Compared to 3D-VLA variants (e.g., SpatialVLA, GeoAware, and GeoVLA), VGA further shows that simply injecting geometric cues into existing pipelines is insufficient; instead, tightly coupling a 3D world model backbone with the action head enables more effective use of geometric priors. VGA also surpasses WAM approaches like UVA and Motus, indicating that pretrained 3D world models provide a strong and competitive alternative to video-based generative backbones. Overall, these results highlight VGA's ability to translate accurate 3D understanding into precise and robust physical manipulation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="page-section bg-white" id="libero-vis">
+            <div class="container px-4 px-lg-5">
+                <h2 class="text-center mt-0">LIBERO Visualization</h2>
+                <hr class="divider" />
+                <div class="row justify-content-center mb-4">
+                    <div class="col-lg-10 text-center">
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(a)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/put the yellow and white mug in the microwave and close it.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(b)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/put the white mug on the plate and put the chocolate pudding to the right of the plate.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(c)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/put the black bowl in the bottom drawer of the cabinet and close it.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(d)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/turn on the stove and put the moka pot on it.mp4"></video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 text-center">
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/put the yellow and white mug in the microwave and close it (depth).mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/put the white mug on the plate and put the chocolate pudding to the right of the plate (depth).mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/put the black bowl in the bottom drawer of the cabinet and close it (depth).mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/simulation/turn on the stove and put the moka pot on it (depth).mp4"></video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center mt-5">
+                    <div class="col-lg-10 text-center">
+                        <p class="text-black">
+                            <!--strong Comparison on the LIBERO benchmark.-->
+                            <strong>Simulation rollouts and depth predictions on the LIBERO benchmark.</strong>
+                            The results show that VGA achieves precise physical manipulation with precise depth predictions.
+                            <br />
+                            (a) Put the yellow and white mug in the microwave and close it.
+                            <br />
+                            (b) Put the white mug on the plate and put the chocolate pudding to the right of the plate.
+                            <br />
+                            (c) Put the black bowl in the bottom drawer of the cabinet and close it.
+                            <br />
+                            (d) Turn on the stove and put the moka pot on it.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="page-section bg-white" id="realworld">
+            <div class="container px-4 px-lg-5">
+                <h2 class="text-center mt-0">Real-World Experiments</h2>
+                <hr class="divider" />
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-10 text-center">
+                        <img class="img-fluid" src="assets\img\result\realworld\real_world_compare.png" style="width: 80%; max-width: 1100px; border-radius: 10px" />
+                        <p class="text-black mt-3" style="font-size: 1.1rem">
+                            <strong>Fig.4 The success rate comparison on the real-world experiments.</strong>
+                            We evaluate VGA under two real-world settings: (1) in-distribution, where the camera viewpoint during evaluation matches training, and (2) out-of-distribution, where the model is deployed under a novel, unseen viewpoint in a zero-shot manner. VGA achieves strong performance in the in-distribution setting, remaining competitive with the best baseline $\pi_{0.5}$ while significantly outperforming ACT and OpenVLA. More importantly, under out-of-distribution evaluation, VGA surpasses all baselines and achieves the highest average success rate, demonstrating clear advantages in generalizing to unseen viewpoints. These results suggest that VGA captures underlying 3D spatial structure rather than relying on viewpoint-specific visual cues, leading to more robust and reliable real-world manipulation.
+                        </p>
+                    </div>
+                </div>
+                <!-- === video 1 ===-->
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-9 text-center">
+                        <h4 class="mt-3">Short-Horizon Tasks</h4>
+                        <div class="row g-3">
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(a)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/1_pick_cube.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(b)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/1_press_button.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(c)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/1_stack_cube.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="text-center mb-1">(d)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/1_stack_cube_unseen_view.mp4"></video>
+                            </div>
+                        </div>
+                        <p class="text-black mt-3">
+                            (a) Real-World Pick Cube. (b) Real-World Press Button. (c) Real-World Stack Cube.
+                        </p>
+                    </div>
+                </div>
+                <!-- === video 2 ===-->
+                <div class="row justify-content-center mb-5">
+                    <div class="col-lg-9 text-center">
+                        <h4 class="mt-3">Long-Horizon Tasks</h4>
+                        <div class="row g-3 justify-content-center">
+                            <div class="col-6 col-md-4">
+                                <p class="text-center mb-1">(a)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/2_pick_vegetable0.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <p class="text-center mb-1">(b)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/2_pick_vegetable1.mp4"></video>
+                            </div>
+                            <div class="col-6 col-md-4">
+                                <p class="text-center mb-1">(c)</p>
+                                <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 14px" src="assets/img/result/realworld/2_pick_vegetable2.mp4"></video>
+                            </div>
+                        </div>
+                        <p class="text-black mt-3">
+                            <strong>Language-conditioned grasping.</strong>
+                            This results presents the real-world grasping with three visually similar objects (namely eggplant (a), carrot (b), and cucumber (c)) arranged in different layouts. Each row corresponds to a different spatial configuration, and the robot is instructed to pick a target object. VGA consistently identifies and grasps the correct object regardless of its position, demonstrating robust language grounding and reliable real-world manipulation performance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="page-section bg-dark text-white" id="contact">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h2 class="mt-0">Let's Get In Touch!</h2>
+                        <hr class="divider" />
+                        <p class="text-muted mb-5">
+                            If you have any questions, feel free to send us a message and we'll get back to you as soon as possible!
+                            <br />
+                            Email: songzj8@mail2.sysu.edu.cn
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <footer class="bg-light py-5">
+            <div class="container px-4 px-lg-5 text-center">
+                <p class="small text-muted mb-1">Human Cyber Physical Intelligence Integration Lab (HCP), SUN YAT-SEN UNIVERSITY</p>
+                <p class="small text-muted mb-3"><a href="https://www.sysu-hcp.net/" target="_blank" style="text-decoration: none">https://www.sysu-hcp.net/</a></p>
+                <p class="small text-muted mt-4" style="font-size: 0.75rem">
+                    This site is powered by the
+                    <a href="https://startbootstrap.com/theme/creative" target="_blank" style="text-decoration: none">Start Bootstrap Creative Theme</a>
+                    .
+                </p>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- SimpleLightbox plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <!-- * *                               SB Forms JS                               * *-->
+        <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
+        <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
+        <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+    </body>
+</html>

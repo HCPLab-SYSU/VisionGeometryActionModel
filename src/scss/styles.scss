@@ -1,0 +1,65 @@
+// 
+// Styles
+// 
+
+// Import custom variables and override default Bootstrap variables
+@import "./variables.scss";
+
+// Import Bootstrap
+@import "bootstrap/scss/bootstrap.scss";
+
+// Import custom styles
+@import "./global.scss";
+
+// Components
+@import "./components/buttons.scss";
+@import "./components/dividers.scss";
+@import "./components/navbar.scss";
+
+// Sections
+@import "./sections/masthead.scss";
+@import "./sections/portfolio.scss";
+
+
+.text-orange {
+    color: #f4623a !important;
+}
+
+
+
+.bg-light-gray {
+    background-color: #eeeeee !important;
+}
+
+
+
+.custom-dropdown {
+    min-width: 220px !important;  
+    padding: 10px 0 !important;  
+    border-radius: 10px !important;
+    background-color: #ffffffdd !important;
+    backdrop-filter: blur(6px); 
+}
+
+
+.custom-dropdown .dropdown-item {
+    padding: 10px 20px !important; 
+    font-size: 15px !important;    
+    color: #777 !important;      
+    transition: all 0.2s ease-in-out;
+}
+
+
+.custom-dropdown .dropdown-item:hover {
+    color: #000 !important;
+    background-color: #f0f0f0 !important;
+    transform: translateX(3px);
+}
+
+
+@media (max-width: 768px) {
+    .custom-dropdown .dropdown-item {
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+    }
+}

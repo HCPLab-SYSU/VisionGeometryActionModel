@@ -1,0 +1,875 @@
+doctype html
+html(lang='en')
+    head
+        script.
+            window.MathJax = {
+                tex: {
+                    inlineMath: [['$', '$'], ['\\(', '\\)']]
+                }
+            };
+        script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js")
+
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+        meta(name='description', content='e0 website')
+        meta(name='author', content='zhihao zhan')
+
+        title E₀
+
+        // Favicon
+        link(rel='icon', type='image/x-icon', href='assets/favicon.ico?v=2')
+
+        // Bootstrap Icons
+        link(href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css', rel='stylesheet')
+
+        // Google fonts
+        link(href='https://fonts.googleapis.com/css?family=Merriweather+Sans:400,700', rel='stylesheet')
+        link(href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic', rel='stylesheet', type='text/css')
+
+        // SimpleLightbox plugin CSS
+        link(href='https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css', rel='stylesheet')
+
+        // Core theme CSS (includes Bootstrap)
+        link(href='css/styles.css', rel='stylesheet')
+
+    body#page-top
+
+        
+        nav#mainNav.navbar.navbar-expand-lg.navbar-light.fixed-top.py-3
+            .container.px-4.px-lg-5
+                a.navbar-brand(href='#page-top') $\mathcal{E}_0$
+                button.navbar-toggler.navbar-toggler-right(type='button', data-bs-toggle='collapse', data-bs-target='#navbarResponsive', aria-controls='navbarResponsive', aria-expanded='false', aria-label='Toggle navigation')
+                    span.navbar-toggler-icon
+                #navbarResponsive.collapse.navbar-collapse
+                    ul.navbar-nav.ms-auto.my-2.my-lg-0
+                        li.nav-item
+                            a.nav-link(
+                                href='javascript:void(0)',
+                                onclick="window.open('https://arxiv.org/abs/2511.21542','_blank');"
+                            )
+                                i.bi-file-earmark-text-fill.me-1
+                                | ArXiv
+
+                        li.nav-item
+                            a.nav-link(href="https://github.com/Doo-mon/e0" target="_blank")
+                                i.bi-github.me-1
+                                | GitHub
+
+                        li.nav-item
+                            a.nav-link(
+                                href="https://huggingface.co/doomon/e0_diff_hybrid_libero"
+                                target="_blank"
+                                style="display:flex; align-items:center;"
+                            )
+                                img(
+                                    src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg"
+                                    style="width:18px; height:18px; margin-right:6px;"
+                                )
+                                | HF
+
+                        li.nav-item
+                            a.nav-link(href='#about') Overview
+                        li.nav-item
+                            a.nav-link(href='#services') Result
+
+
+                        li.nav-item.dropdown
+                            a.nav-link.dropdown-toggle(href='#', id='VideosDropdown', role='button', data-bs-toggle='dropdown', aria-expanded='false')
+                                | Videos
+
+                            ul.dropdown-menu.custom-dropdown(aria-labelledby='VideosDropdown')
+                                li
+                                    a.dropdown-item(href='#libero-result') LIBERO
+                                li
+                                    a.dropdown-item(href='#maniskill-result') ManiSkill
+                                li
+                                    a.dropdown-item(href='#vlabench-result') VLABench
+                                li
+                                    a.dropdown-item(href='#robotwin-result') RoboTwin
+                                li
+                                    a.dropdown-item(href='#realworld-result') Real-World
+                                
+                    
+                        li.nav-item
+                            a.nav-link(href='#contact') Contact
+                        
+        // 标题页
+        header.masthead
+            .container.px-4.px-lg-5.h-100
+                .row.gx-4.gx-lg-5.h-100.align-items-center.justify-content-center.text-center
+                    .col-lg-12.align-self-end
+
+
+                        h1.text-white.font-weight-bold 
+                            // | $\mathcal{E}_0$: Enhancing Generalization and Fine-Grained Control in VLA Models via Tweedie Discrete Diffusion
+                            span(style="color:#ff6600") $\mathcal{E}_0$:
+                            span(style="color:#ffffff")  Enhancing Generalization and Fine-Grained Control in VLA Models
+                            br
+                            span(style="color:#ffffff")  via
+                            span(style="color:#ff6600")  Tweedie Discrete Diffusion
+
+                        
+                        hr.divider
+                    
+                    .col-lg-8.align-self-baseline
+
+                        p.text-white-75.mt-3(style="font-size:1.1rem; line-height:1.6; text-align:center;")
+                            | Zhihao Zhan¹,&nbsp;&nbsp;
+                            | Jiaying Zhou¹,&nbsp;&nbsp;
+                            | Likui Zhang¹,&nbsp;&nbsp;
+                            | Qinhan Lyu¹,&nbsp;&nbsp;
+                            | Hao Liu¹,&nbsp;&nbsp;
+                            | Jusheng Zhang¹,&nbsp;&nbsp;
+                            | Weizheng Li¹,&nbsp;&nbsp;
+                            | Ziliang Chen¹,&nbsp;&nbsp;
+                            | Tianshui Chen³⁴,&nbsp;&nbsp;
+                            | Ruifeng Zhai¹,&nbsp;&nbsp;
+                            | Keze Wang¹,&nbsp;&nbsp;
+                            | Liang Lin¹²³,&nbsp;&nbsp;
+                            | Guangrun Wang¹²³
+
+                        p.text-white-75.mt-2(style="font-size:1rem; line-height:1.4; text-align:center;")
+                            | ¹ Sun Yat-sen University, Guangzhou, China
+                            br
+                            | ² Guangdong Key Laboratory of Big Data Analysis and Processing
+                            br
+                            | ³ X-Era AI Lab
+                            br
+                            | ⁴ Guangdong University of Technology
+
+
+                    
+                        .text-center.mt-4
+                            a.btn.btn-primary.btn-xl.mx-2(href='#abstract')
+                                i.bi-play-circle.me-2
+                                | Details
+
+
+                            a.btn.btn-outline-light.btn-xl.mx-2(href='javascript:void(0)', onclick="window.open('https://arxiv.org/abs/2511.21542', '_blank');")
+                                i.bi-file-earmark-text.me-2
+                                | ArXiv
+
+                            a.btn.btn-outline-light.btn-xl.mx-2(
+                                onclick="window.open('https://github.com/Doo-mon/e0')"
+                                style="display:inline-flex; align-items:center;"
+                            )
+                                i.bi-github.me-2
+                                | GitHub
+
+                            a.btn.btn-outline-light.btn-xl.mx-2(
+                                onclick="window.open('https://huggingface.co/doomon/e0_diff_hybrid_libero')"
+                                style="display:inline-flex; align-items:center;"
+                            )
+                                img(src="https://huggingface.co/front/assets/huggingface_logo-noborder.svg",
+                                    style="width:22px; height:22px; margin-right:8px;")
+                                | HuggingFace
+
+
+
+        
+        section#abstract.page-section(style="background-color:#f2f2f2;")
+            .container(style="max-width:900px;")
+                .text-center
+                    h2.mt-0(style="color:#ff6600;font-weight:800;font-size:2.4rem;text-shadow: 2px 3px 4px rgba(0,0,0,0.25);") Abstract
+                    hr.divider(style="border-color:#d14b6e;")
+
+                p.text-black.mt-4(style="font-size:1.05rem; line-height:1.7; text-align:justify;")
+                            | Vision–Language–Action (VLA) models offer a unified framework for robotic manipulation by integrating visual perception, language understanding, and control generation. 
+                            | However, existing VLA systems still struggle to generalize across diverse tasks, scenes, and camera viewpoints, and often produce coarse or unstable actions. 
+                            | We argue that these limitations are closely tied to the structural properties of actions in VLA settings, including the inherent multi-peaked nature of action distributions, the token-based symbolic reasoning of pretrained VLM/VLA backbones, and the effective finite resolution imposed by real-world robotic control.
+                            | Motivated by these properties, we introduce $\mathcal{E}_0$, a tweedie discrete diffusion framework that formulates action generation as iterative denoising over quantized action tokens. 
+                            | By operating in a discrete action space with a principled diffusion process, $\mathcal{E}_0$ naturally aligns with token-based reasoning, supports fine-grained yet executable action control, and avoids the distributional mismatch of masking-based discrete diffusion.
+                            | We further introduce a spherical viewpoint perturbation augmentation to enhance robustness to camera shifts without additional data. 
+                            | Experiments on LIBERO, VLABench, ManiSkill, and a real-world Franka arm demonstrate that $\mathcal{E}_0$ achieves state-of-the-art performance across 14 diverse environments, outperforming strong baselines by 10.7\% on average.
+
+
+
+
+
+
+
+
+        section#about.page-section.bg-white
+            .container.px-4.px-lg-5
+                .row.gx-4.gx-lg-5.justify-content-center
+                    .col-lg-10.text-center
+
+                        h2.mt-0(style="color:#ff6600;font-weight:800;font-size:2.4rem;text-shadow: 2px 3px 4px rgba(0,0,0,0.25);") Overview
+                        
+
+                        hr.divider(style="border-color:#d14b6e;")
+                        img.img-fluid(src="assets/img/overview/e0.png", style="width: 100%;")
+                        p.text-black.mb-4
+                            strong Fig.1 Overview and detailed illustration of $\mathcal{E}_0$.
+                            | (a) Overall architecture of the proposed model. 
+                            | (b) Training and inference pipeline, showing how inputs are encoded, diffused, and decoded into executable action sequences.
+
+
+                        hr.divider(style="border-color:#d14b6e;")
+                        img.img-fluid(src="assets/img/overview/diff.png", style="width: 60%;")
+                        p.text-black.mb-4
+                            strong Fig.2 Overview of action modeling paradigms.
+                            | (a) Discrete modeling: Traditional autoregressive (AR) approaches and recent mask-based discrete diffusion methods, which operate over a small discrete action vocabulary.
+                            | (b) Continuous modeling: Continuous diffusion–based policies and AR–diffusion hybrids that regress continuous actions.
+                            | (c) Our approach: $\mathcal{E}_0$ integrates AR-style conditioning with continuized discrete diffusion, enabling efficient action generation while preserving compatibility with pretrained vision–language backbones and supporting fine-grained action control.
+                        
+                        //a.btn.btn-light.btn-xl(href='#services') More
+                        a.btn.btn-primary.btn-xl(href='#services') More 
+
+
+        section#services.page-section.bg-light-gray
+            .container.px-4.px-lg-5
+                .text-center
+                    h2.mt-0(style="color:#ff6600;font-weight:800;font-size:2.4rem;text-shadow: 2px 3px 4px rgba(0,0,0,0.25);") Results
+                    hr.divider
+
+                .row.gx-4.gx-lg-5.justify-content-center
+
+                    a.col-lg-3.col-md-6.text-center(href="#ablation", style="text-decoration:none; color:inherit; cursor:pointer;")
+                        .mt-5
+                            .mb-2
+                                i.bi-gem.fs-1.text-primary
+                            h3.h4.mb-2 
+                                | Ablation
+                                br
+                                | Experiments
+
+                    a.col-lg-3.col-md-6.text-center(href="#libero-result", style="text-decoration:none; color:inherit; cursor:pointer;")
+                        .mt-5
+                            .mb-2
+                                i.bi-laptop.fs-1.text-primary
+                            h3.h4.mb-2 
+                                | Simulation
+                                br
+                                | Experiments
+
+                    a.col-lg-3.col-md-6.text-center(href="#realworld-result", style="text-decoration:none; color:inherit; cursor:pointer;")
+                        .mt-5
+                            .mb-2
+                                i.bi-globe.fs-1.text-primary
+                            h3.h4.mb-2
+                                | Real World
+                                br
+                                | Experiments
+
+
+
+
+        section#ablation.page-section.bg-white
+            .container.px-4.px-lg-5
+
+                
+                h2.text-center.mt-0 Ablation Experiments
+                hr.divider
+
+                
+                .row.gx-4.gx-lg-5.justify-content-center
+
+                    .col-lg-10.text-center
+                        img.img-fluid(src="assets/img/result/ablation_summary.png", style="width: 100%; max-width:1100px; border-radius:10px;")
+
+                        p.text-black.mt-3(style="font-size: 1.1rem;")
+                            strong Fig.3 Comprehensive ablation analysis of key hyperparameters in the LIBERO environments.
+                            | We investigate four crucial design factors influencing our model: 
+                            | (a) Discretization bins—increasing bin granularity enhances precision up to 2048 bins, beyond which gains saturate; 
+                            | (b) Action horizon—a moderate prediction length balances reactivity and temporal consistency; 
+                            | (c) Action dimensions—embedding sizes slightly above the dataset’s action space yield the best expressiveness–robustness trade-off; and 
+                            | (d) One-hot smooth factor—moderate decay values smooth discrete logits, stabilizing diffusion and improving overall success rate.
+
+
+
+
+
+        section#libero-result.page-section.bg-white
+            .container.px-4.px-lg-5
+
+                h2.text-center.mt-0 LIBERO Compare Results
+                hr.divider
+                .d-flex.flex-wrap.justify-content-center.gap-4
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-1/pi0_failure.mp4")
+                        
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-1/pi0fast_failure.mp4")
+                        
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-1/pi05_failure.mp4")
+                        
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-1/e0_success.mp4")
+                        
+
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            //strong Comparison on the LIBERO benchmark.
+                            | In the task 
+                            strong pick up the milk and place it in the basket
+                            | , our $\mathcal{E}_0$ 
+                            | successfully grasped the object with the correct posture and completed the task without knocking it over.
+
+
+
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-2/pi0_failure.mp4")
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-2/pi0fast_failure.mp4")
+
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-2/pi05_failure.mp4")
+
+
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/libero-compare-2/e0_success.mp4")
+
+  
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            //strong Comparison on the LIBERO benchmark.
+                            | In the task 
+                            strong put_the_bowl_on_the_plate
+                            | , our $\mathcal{E}_0$ 
+                            | accurately and swiftly grasped the object and completed the task.
+
+
+
+
+        section#maniskill-result.page-section.bg-white
+            .container.px-4.px-lg-5
+
+                h2.text-center.mt-0 ManiSkill Compare Results
+                hr.divider
+
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-1/pi0_failure.mp4")
+                        
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-1/pi0fast_failure.mp4")
+                        
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-1/pi05_failure.mp4")
+                        
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-1/e0_success.mp4")
+                        
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            //strong Comparison on the ManiSkill benchmark.
+                            | In the task 
+                            strong PegInsertionSide
+                            | , our $\mathcal{E}_0$ achieved the best performance in this highly dexterous task.
+                            | It was able to precisely align the peg with the hole and successfully insert it, while other models performed poorly.
+
+
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-2/pi0_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-2/pi0fast_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-2/pi05_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-2/e0_success.mp4")
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            | In the task 
+                            strong PlugCharger
+                            | , our $\mathcal{E}_0$ performed the task with high precision and fine-grained control.
+
+
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-3/pi0_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-3/pi0fast_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-3/pi05_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/maniskill-compare-3/e0_success.mp4")
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            | In the task 
+                            strong StackCube
+                            | , our $\mathcal{E}_0$ accomplished the task remarkably well.
+       
+
+
+
+
+        section#vlabench-result.page-section.bg-white
+            .container.px-4.px-lg-5
+
+                h2.text-center.mt-0 VLABench Compare Results
+                hr.divider
+
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-1/pi0_failure.mp4")
+                        
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-1/pi0fast_failure.mp4")
+                        
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-1/pi05_failure.mp4")
+                        
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-1/e0_success.mp4")
+                        
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            //strong Comparison on the VLABench benchmark.
+                            | In the task 
+                            strong pick up the spade 3
+                            | , our $\mathcal{E}_0$ correctly identifies and precisely grasps the target card
+                            | , showing superior multimodal reasoning and control.
+       
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-2/pi0_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-2/pi0fast_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-2/pi05_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-2/e0_success.mp4")
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            | In the task 
+                            strong select mahjong
+                            | , our $\mathcal{E}_0$ 
+                            | correctly identified the target object specified by the instruction and completed the task without knocking over any other items.
+
+                .d-flex.flex-wrap.justify-content-center.gap-4
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-3/pi0_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_0$-FAST Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-3/pi0fast_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\pi_{0.5}$ Failure
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-3/pi05_failure.mp4")
+                    .text-center(style="width:22%")
+                        h5.mt-3 $\mathcal{E}_0$ Success
+                        video(autoplay loop muted playsinline style="width:100%; border-radius:10px;"
+                            src="assets/img/result/vlabench-compare-3/e0_success.mp4")
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black
+                            | In the task 
+                            strong select painting
+                            | , our $\mathcal{E}_0$ correctly interpreted the task instruction and 
+                            | completed the task accordingly, rather than mechanically pressing the center button.
+
+
+
+        section#robotwin-result.page-section.bg-white
+            .container.px-4.px-lg-5
+
+                h2.text-center.mt-0 RoboTwin Results
+                hr.divider
+
+                - var robotwin_list = ["adjust_bottle","beat_block_hammer","click_alarmclock","click_bell","dump_bin_bigbin","move_can_pot","move_pillbottle_pad","move_playingcard_away","move_stapler_pad","open_laptop","open_microwave","place_a2b_left","place_a2b_right","place_container_plate","place_empty_cup","place_fan","place_mouse_pad","place_object_scale","place_object_stand","place_phone_stand","place_shoe","press_stapler","rotate_qrcode","shake_bottle","shake_bottle_horizontally","stamp_seal","turn_switch","blocks_ranking_rgb","blocks_ranking_size","grab_roller","handover_block","handover_mic","hanging_mug","lift_pot","pick_diverse_bottles","pick_dual_bottles","place_bread_basket","place_bread_skillet","place_burger_fries","place_can_basket","place_cans_plasticbox","place_dual_shoes","place_object_basket","put_bottles_dustbin","put_object_cabinet","scan_object","stack_blocks_three","stack_blocks_two","stack_bowls_three","stack_bowls_two"]
+
+                .row.row-cols-1.row-cols-sm-2.row-cols-md-3.row-cols-lg-5.g-2
+                    each name in robotwin_list
+                        .col.text-center
+                            h6.mt-2 #{name.replace(/_/g, " ")}
+                            video(
+                                autoplay loop muted playsinline
+                                style="width:100%; border-radius:10px;"
+                                src=`assets/img/result/robotwin/${name}_success.mp4`
+                            )
+
+                .row.justify-content-center.mt-5
+                    .col-lg-10.text-center
+                        p.text-black.mt-3
+                            strong RoboTwin benchmark overview.
+                            | The benchmark consists of 27 single-arm and 23 dual-arm manipulation tasks, 
+                            | spanning a diverse range of objects and actions. 
+                            | Several dual-arm tasks additionally require coordinated bimanual control, posing higher challenges for policy learning.
+
+
+        section#realworld-result.page-section.bg-white
+            .container.px-4.px-lg-5
+
+                h2.text-center.mt-0 Real-World Experiments
+                hr.divider
+
+                // === video 1 ===
+                .row.justify-content-center.mb-5
+                    .col-lg-9.text-center
+                        h4.mt-3 Short-Horizon Tasks
+                        video(
+                            autoplay loop muted playsinline controls
+                            style="width:100%; border-radius:14px;"
+                            src="assets/img/result/realworld/real-fig-5-fig-16-short.mp4"
+                        )
+                        p.text-black.mt-
+                            strong Performance on real-world robotic experiments.
+                            |  Short-horizon tasks (
+                            strong pick block, press button, close door, pull drawer, stack block
+                            | ).
+   
+
+                // === video 2 ===
+                .row.justify-content-center.mb-5
+                    .col-lg-9.text-center
+                        h4.mt-3 Long-Horizon Tasks
+                        video(
+                            autoplay loop muted playsinline controls
+                            style="width:100%; border-radius:14px;"
+                            src="assets/img/result/realworld/real-fig-5-long.mp4"
+                        )
+                        p.text-black.mt-3
+                            strong Performance on real-world robotic experiments.
+                            |Long-horizon tasks (
+                            strong pick block twice, pull drawer and put in block,
+                            | and
+                            strong put in plate and close door
+                            | ).
+                        
+
+                // === video 3 ===
+                .row.justify-content-center.mb-5
+                    .col-lg-9.text-center
+                        h4.mt-3 Unseen Scenario
+                        video(
+                            autoplay loop muted playsinline controls
+                            style="width:100%; border-radius:14px;"
+                            src="assets/img/result/realworld/real-fig-14-unseen.mp4"
+                        )
+                        p.text-black.mt-3
+                            strong Comparison of keyframes in the real-world pick twice task under unseen scenarios.
+                            | During evaluation, we tested the model across various unseen scenarios. In most cases, the model successfully completed the task. 
+                            | In a few cases, task quality is slightly compromised but still acceptable—for example, 
+                            | placement deviations caused by an oversized green dish, or changes in the order of object picking due to color variations.
+
+
+
+                // === video 4 ===
+                .row.justify-content-center.mb-5
+                    .col-lg-9.text-center
+                        h4.mt-3 Human Intervention
+                        video(
+                            autoplay loop muted playsinline controls
+                            style="width:100%; border-radius:14px;"
+                            src="assets/img/result/realworld/real-fig-15-intervention.mp4"
+                        )
+                        p.text-black.mt-3
+                            strong Comparison of keyframes in real-world pick twice task with and without human intervention.
+                            | We introduce human perturbation by manually shifting the target cube to disrupt the model's original plan. 
+                            | After the interruption, the model is able to promptly adapt and replan its actions.
+
+
+                // === video 5 ===
+                .row.justify-content-center.mb-5
+                    .col-lg-9.text-center
+                        h4.mt-3 Pick Vegetables Twice Tasks
+                        video(
+                            autoplay loop muted playsinline controls
+                            style="width:100%; border-radius:14px;"
+                            src="assets/img/result/realworld/real-fig-17-pick-vegetables.mp4"
+                        )
+                        p.text-black.mt-3
+                            strong Qualitative results on the real-world Pick Vegetables Twice task under randomly arranged tabletop scenes. 
+                            | Each video shows one complete execution sequence consisting of two consecutive pick-and-place operations
+                            strong (carrot and cucumber, potato and eggplant, pepper and corn) .
+                            | Across all settings, the surrounding distractor objects are placed in completely random configurations, 
+                            | demonstrating the robustness of our policy under visually diverse and cluttered real-world environments.
+                                    
+
+
+
+
+
+        //- section.page-section.bg-dark.text-white
+
+        //-     .container.px-4.px-lg-5.text-center
+        //-         h2.mb-4 Free Download at Start Bootstrap!
+        //-         a.btn.btn-light.btn-xl(href='https://startbootstrap.com/theme/creative/') Download Now!
+
+
+        //-     // Portfolio
+        //-     #portfolio
+        //-         .container-fluid.p-0
+        //-             .row.g-0
+        //-                 .col-lg-4.col-sm-6
+        //-                     a.portfolio-box(href='assets/img/portfolio/fullsize/1.jpg', title='Project Name')
+        //-                         img.img-fluid(src='assets/img/portfolio/thumbnails/1.jpg', alt='...')
+        //-                         .portfolio-box-caption
+        //-                             .project-category.text-white-50
+        //-                                 | Category
+        //-                             .project-name
+        //-                                 | Project Name
+        //-                 .col-lg-4.col-sm-6
+        //-                     a.portfolio-box(href='assets/img/portfolio/fullsize/2.jpg', title='Project Name')
+        //-                         img.img-fluid(src='assets/img/portfolio/thumbnails/2.jpg', alt='...')
+        //-                         .portfolio-box-caption
+        //-                             .project-category.text-white-50
+        //-                                 | Category
+        //-                             .project-name
+        //-                                 | Project Name
+        //-                 .col-lg-4.col-sm-6
+        //-                     a.portfolio-box(href='assets/img/portfolio/fullsize/3.jpg', title='Project Name')
+        //-                         img.img-fluid(src='assets/img/portfolio/thumbnails/3.jpg', alt='...')
+        //-                         .portfolio-box-caption
+        //-                             .project-category.text-white-50
+        //-                                 | Category
+        //-                             .project-name
+        //-                                 | Project Name
+        //-                 .col-lg-4.col-sm-6
+        //-                     a.portfolio-box(href='assets/img/portfolio/fullsize/4.jpg', title='Project Name')
+        //-                         img.img-fluid(src='assets/img/portfolio/thumbnails/4.jpg', alt='...')
+        //-                         .portfolio-box-caption
+        //-                             .project-category.text-white-50
+        //-                                 | Category
+        //-                             .project-name
+        //-                                 | Project Name
+        //-                 .col-lg-4.col-sm-6
+        //-                     a.portfolio-box(href='assets/img/portfolio/fullsize/5.jpg', title='Project Name')
+        //-                         img.img-fluid(src='assets/img/portfolio/thumbnails/5.jpg', alt='...')
+        //-                         .portfolio-box-caption
+        //-                             .project-category.text-white-50
+        //-                                 | Category
+        //-                             .project-name
+        //-                                 | Project Name
+        //-                 .col-lg-4.col-sm-6
+        //-                     a.portfolio-box(href='assets/img/portfolio/fullsize/6.jpg', title='Project Name')
+        //-                         img.img-fluid(src='assets/img/portfolio/thumbnails/6.jpg', alt='...')
+        //-                         .portfolio-box-caption.p-3
+        //-                             .project-category.text-white-50
+        //-                                 | Category
+        //-                             .project-name
+        //-                                 | Project Name
+
+
+
+
+        section#contact.page-section.bg-dark.text-white
+            .container.px-4.px-lg-5
+                .row.gx-4.gx-lg-5.justify-content-center
+                    .col-lg-8.col-xl-6.text-center
+                        h2.mt-0 Let's Get In Touch!
+                        hr.divider
+                        p.text-muted.mb-5
+                            | If you have any questions, feel free to send us a message and we'll get back to you as soon as possible!
+                            br
+                            | Email: zhanzhh6@mail2.sysu.edu.cn
+                
+                //- .row.gx-4.gx-lg-5.justify-content-center.mb-5
+                //-     .col-lg-6
+
+                //-         // * * * * * * * * * * * * * * *
+                //-         // * * SB Forms Contact Form * *
+                //-         // * * * * * * * * * * * * * * *
+
+                //-         // This form is pre-integrated with SB Forms.
+                //-         // To make this form functional, sign up at
+                //-         // https://startbootstrap.com/solution/contact-forms
+                //-         // to get an API token!
+
+                //-         form#contactForm(data-sb-form-api-token='API_TOKEN')
+
+                //-             // Name input
+                //-             .form-floating.mb-3
+                //-                 input#name.form-control(
+                //-                     type='text',
+                //-                     placeholder='Enter your name...',
+                //-                     data-sb-validations='required'
+                //-                 )
+                //-                 label(for='name') Full name
+                //-                 .invalid-feedback(data-sb-feedback='name:required')
+                //-                     | A name is required.
+
+                //-             // Email address input
+                //-             .form-floating.mb-3
+                //-                 input#email.form-control(
+                //-                     type='email',
+                //-                     placeholder='name@example.com',
+                //-                     data-sb-validations='required,email'
+                //-                 )
+                //-                 label(for='email') Email address
+                //-                 .invalid-feedback(data-sb-feedback='email:required')
+                //-                     | An email is required.
+                //-                 .invalid-feedback(data-sb-feedback='email:email')
+                //-                     | Email is not valid.
+
+                //-             // Phone number input
+                //-             .form-floating.mb-3
+                //-                 input#phone.form-control(
+                //-                     type='tel',
+                //-                     placeholder='(123) 456-7890',
+                //-                     data-sb-validations='required'
+                //-                 )
+                //-                 label(for='phone') Phone number
+                //-                 .invalid-feedback(data-sb-feedback='phone:required')
+                //-                     | A phone number is required.
+
+                //-             // Message input
+                //-             .form-floating.mb-3
+                //-                 textarea#message.form-control(
+                //-                     type='text',
+                //-                     placeholder='Enter your message here...',
+                //-                     style='height: 10rem;',
+                //-                     data-sb-validations='required'
+                //-                 )
+                //-                 label(for='message') Message
+                //-                 .invalid-feedback(data-sb-feedback='message:required')
+                //-                     | A message is required.
+
+                //-             // Submit success message
+                //-             //
+                //-             // This is what your users will see when the form
+                //-             // has successfully submitted
+
+                //-             #submitSuccessMessage.d-none
+                //-                 .text-center.mb-3
+                //-                     .fw-bolder Form submission successful!
+                //-                     | To activate this form, sign up at
+                //-                     br
+                //-                     a(href='https://startbootstrap.com/solution/contact-forms') https://startbootstrap.com/solution/contact-forms
+
+                //-             // Submit error message
+                //-             //
+                //-             // This is what your users will see when there is
+                //-             // an error submitting the form
+
+                //-             #submitErrorMessage.d-none
+                //-                 .text-center.text-danger.mb-3 Error sending message!
+
+                //-             // Submit Button
+                //-             .d-grid
+                //-                 button#submitButton.btn.btn-primary.btn-xl.disabled(type='submit') Submit
+
+                //- .row.gx-4.gx-lg-5.justify-content-center
+                //-     .col-lg-4.text-center.mb-5.mb-lg-0
+                //-         i.bi-phone.fs-2.mb-3.text-muted
+                //-         div +1 (555) 123-4567
+
+        footer.bg-light.py-5
+            .container.px-4.px-lg-5.text-center
+
+                
+                p.small.text-muted.mb-1
+                    | Human Cyber Physical Intelligence Integration Lab (HCP), SUN YAT-SEN UNIVERSITY
+
+                
+                p.small.text-muted.mb-3
+                    a(href="https://www.sysu-hcp.net/", target="_blank", style="text-decoration:none;")
+                        | https://www.sysu-hcp.net/
+
+                
+                p.small.text-muted.mt-4(style="font-size:0.75rem")
+                    | This site is powered by the 
+                    a(href="https://startbootstrap.com/theme/creative", target="_blank", style="text-decoration:none;")
+                        | Start Bootstrap Creative Theme
+                    | .
+
+
+
+        //- footer.bg-light.py-5
+        //-     .container.px-4.px-lg-5
+        //-         .small.text-center.text-muted
+        //-             | Human Cyber Physical Intelligence Integration Lab (HCP), SUN YAT-SEN UNIVERSITY
+        //-             br
+        //-             | https://www.sysu-hcp.net/
+        //-             //- | Copyright &copy; 2025 - Company Name
+
+        //- footer.py-4.bg-light.text-center
+        //-     small.text-muted
+        //-         | This site is powered by the 
+        //-         a(href="https://startbootstrap.com/theme/creative", target="_blank") Start Bootstrap Creative Theme
+        //-         | .
+
+
+
+
+        // Bootstrap core JS
+        script(src='https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js')
+
+        // SimpleLightbox plugin JS
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js')
+
+        // Core theme JS
+        script(src='js/scripts.js')
+
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        // * *                               SB Forms JS                               * *
+        // * * Activate your form at https://startbootstrap.com/solution/contact-forms * *
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+        script(src='https://cdn.startbootstrap.com/sb-forms-latest.js')
