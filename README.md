@@ -13,7 +13,7 @@ At its core, robotic manipulation is a problem of vision-to-geometry mapping ($f
 ---
 
 <p align="center">
-  <img src="assets/img/overview/figure2.png" alt="" width="800">
+  <img src="docs/assets/img/overview/figure2.png" alt="" width="800">
 </p>
 
 <p align="center">
