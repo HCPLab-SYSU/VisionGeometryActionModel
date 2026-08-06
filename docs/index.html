@@ -47,7 +47,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0)" onclick="window.open(window.location.href, '_blank')">
+                            <a class="nav-link" href="https://github.com/HCPLab-SYSU/VisionGeometryActionModel" target="_blank" rel="noopener noreferrer">
                                 <i class="fab fa-github me-1"></i>
                                 GitHub
                             </a>
@@ -93,7 +93,7 @@
                                 <i class="ai ai-arxiv me-2"></i>
                                 ArXiv
                             </a>
-                            <a class="btn btn-outline-light btn-xl mx-2" href="javascript:void(0)" onclick="window.open(window.location.href, '_blank')" style="display: inline-flex; align-items: center">
+                            <a class="btn btn-outline-light btn-xl mx-2" href="https://github.com/HCPLab-SYSU/VisionGeometryActionModel" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center">
                                 <i class="fab fa-github me-2"></i>
                                 GitHub
                             </a>
@@ -322,6 +322,29 @@
                 </div>
             </div>
         </section>
+        <section class="page-section" id="citation" style="background-color: #f2f2f2">
+            <div class="container px-4 px-lg-5" style="max-width: 900px">
+                <div class="text-center">
+                    <h2 class="mt-0" style="color: #ff6600; font-weight: 800; font-size: 2.4rem; text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25)">Citation</h2>
+                    <hr class="divider" style="border-color: #d14b6e" />
+                    <p class="text-muted mb-4">If you find our work useful, please consider citing:</p>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-end mb-2">
+                        <button class="btn btn-primary" id="copy-citation-button" type="button" onclick="copyCitation()">
+                            <i class="bi bi-clipboard me-1"></i>
+                            <span id="copy-citation-label">Copy</span>
+                        </button>
+                    </div>
+                    <pre class="mb-0 p-4 bg-dark text-white rounded" style="overflow-x: auto; text-align: left"><code id="citation-code">@article{song2026robotic,
+    title={Robotic manipulation is vision-to-geometry mapping (f (v)→ g): Vision-geometry backbones over language and video models},
+    author={Song, Zijian and Li, Qichang and Zhou, Jiawei and Yuan, Zhenlong and Chen, Tianshui and Lin, Liang and Wang, Guangrun},
+    journal={arXiv preprint arXiv:2604.12908},
+    year={2026}
+}</code></pre>
+                </div>
+            </div>
+        </section>
         <section class="page-section bg-dark text-white" id="contact">
             <div class="container px-4 px-lg-5">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -354,6 +377,18 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <script>
+            function copyCitation() {
+                const citation = document.getElementById('citation-code').textContent;
+                navigator.clipboard.writeText(citation).then(() => {
+                    const label = document.getElementById('copy-citation-label');
+                    label.textContent = 'Copied!';
+                    setTimeout(() => {
+                        label.textContent = 'Copy';
+                    }, 2000);
+                });
+            }
+        </script>
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <!-- * *                               SB Forms JS                               * *-->
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
