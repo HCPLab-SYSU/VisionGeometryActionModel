@@ -1,0 +1,177 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "finetune_libero",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "torch.distributed.run",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": false,
+            "args": [
+                "--standalone",
+                "--nnodes",
+                "1",
+                "--nproc-per-node",
+                "1",
+                "vla-scripts/finetune.py",
+                "--vlm_path",
+                "pretrained_models/prism-qwen25-extra-dinosiglip-224px-0_5b",
+                "--config_file_path",
+                "pretrained_models/configs",
+                "--data_root_dir",
+                "data/libero",
+                "--task_suite",
+                "spatial",  // 10, goal, object, spatial
+                "--use_film",
+                "False",
+                "--num_images_in_input",
+                "2",
+                "--use_proprio",
+                "True",
+                "--use_lora",
+                "True",  // True or False
+                "--use_fz",
+                "False",  // True of False, use_fz = not use_lora
+                "--use_minivlm",
+                "True",
+                "--image_aug",
+                "True",
+                "--num_steps_before_decay",
+                "150000",
+                "--max_steps",
+                "150005",
+                "--save_freq",
+                "500",
+                "--save_latest_checkpoint_only",
+                "False",
+                "--merge_lora_during_training",
+                "True",
+                "--batch_size",
+                "4",
+                "--grad_accumulation_steps",
+                "1",
+                "--learning_rate",
+                "2e-4",
+                "--lora_rank",
+                "64",
+                "--use_pro_version",
+                "True",  // True or False
+                "--wandb_entity",
+                "wandb",
+                "--wandb_project",
+                "vla_adapter",
+                "--run_id_override",
+                "lora_312",  // 这里可以指定我自定义的保存路径，它可以覆盖run_id_note以及对应的前缀
+                "--version_id",
+                "version_312",
+                // "--resume",
+                // "True",
+                // "--resume_step",
+                // "105000",
+                // "--resum_vla_path",
+                // "outputs/10/10_lora4_011--105000_chkpt",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "3",
+            },
+        },
+        {
+            "name": "eval_libero",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/experiments/robot/libero/run_libero_eval.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "args": [
+                "--use_proprio",
+                "True",
+                "--num_images_in_input",
+                "2",
+                "--use_film",
+                "False",
+                "--pretrained_checkpoint",
+                "outputs/object/object_lora_011--36000_chkpt",  // ckpt dir
+                "--task_suite_name",
+                "libero_object",  // libero_spatial, libero_object, libero_goal, libero_10
+                "--use_pro_version",
+                "True",  // True or False
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "3",
+            },
+        },
+        {
+            "name": "eval_liberoplus",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/experiments/robot/libero/run_liberoplus_eval.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "args": [
+                "--use_proprio",
+                "True",
+                "--num_images_in_input",
+                "2",
+                "--use_film",
+                "False",
+                "--pretrained_checkpoint",
+                "outputs/object/object_lora_320--40000_chkpt",  // ckpt dir
+                "--task_suite_name",
+                "libero_object",  // libero_spatial, libero_object, libero_goal, libero_10
+                "--use_pro_version",
+                "True",  // True or False
+                "--task_category",
+                "Light Conditions",
+                "--num_trials_per_task",
+                "1",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "3",
+            },
+        },
+        {
+            "name": "eval_adapt3r_libero",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/experiments/robot/libero/run_adapt3r_libero_eval.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true,
+            "args": [
+                "--use_proprio",
+                "True",
+                "--num_images_in_input",
+                "2",
+                "--use_film",
+                "False",
+                "--pretrained_checkpoint",
+                "outputs/object/object_lora_011--36000_chkpt",  // ckpt dir
+                "--task_suite_name",
+                "libero_object",  // libero_spatial, libero_object, libero_goal, libero_10
+                "--use_pro_version",
+                "True",  // True or False
+                "--camera_pose_variations",
+                "0.5",  // False / small / "medium" / "large" / theta
+                "--hd_rendering",
+                "False",
+            ],
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "3",
+            },
+        },
+        {
+            "name": "Python 调试程序: 当前文件",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        }
+    ]
+}
