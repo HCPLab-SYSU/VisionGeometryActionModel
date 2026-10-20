@@ -156,9 +156,9 @@ dmypy.json
 .DS_Store
 
 # Caches and Datasets
-/cache/
-/data/
+cache/
+data/
 
 # Rollout videos and wandb logs
-/rollouts/
-/wandb/
+rollouts/
+wandb/

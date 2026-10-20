@@ -1,6 +1,6 @@
 <div align="center">
 
-# [ACM-MM 2026] Robotic Manipulation is Vision-to-Geometry Mapping
+# VGA: Robotic Manipulation is Vision-to-Geometry Mapping
 
 **Vision-Geometry backbones over language and video models for precise robotic manipulation.**
 
@@ -37,7 +37,7 @@
 ## Abstract
 
 
-VGA treats robotic manipulation as a vision-to-geometry mapping problem: visual observations are converted into a native 3D representation before actions are decoded. This repository provides reproducible LIBERO and LIBERO-plus training and evaluation entry points based on a pretrained VGGT backbone.
+VGA maps visual observations to geometry before decoding robot actions. This repository provides training and evaluation entry points for LIBERO and LIBERO-plus with a pretrained VGGT backbone.
 
 The public repository's `master` branch contains two modes:
 
@@ -50,7 +50,7 @@ The public repository's `master` branch contains two modes:
 ## Contents
 
 - [Model overview](#model-overview)
-- [Repository and environment workflow](#repository-and-environment-workflow)
+- [Mode selection](#mode-selection)
 - [Installation](#installation)
 - [Datasets and assets](#datasets-and-assets)
 - [Pretrained models](#pretrained-models)
@@ -67,36 +67,30 @@ The public repository's `master` branch contains two modes:
 VGA replaces a conventional language or video backbone with a pretrained VGGT 3D world model. Two camera views are processed by VGGT's alternating local and global attention, producing native spatial representations that preserve scene geometry. Learnable action queries and camera tokens connect these representations to the action head; proprioception is projected into the same multimodal sequence.
 
 
-## Repository and environment workflow
+## Mode selection
 
-After publication, the repository has a single public `master` branch containing both modes. Clone it once:
-
-```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL> vggt_adapter
-cd vggt_adapter
-
-# Choose one environment for the mode you want to run:
-conda activate vga_libero   # standard LIBERO
-# conda activate vga_liberoplus  # LIBERO-plus
-```
-
-Do not change the evaluator source code when switching modes. The evaluator command and Conda environment select the mode, while environment variables select local installations and model locations. A typical setup is:
+Use the matching environment and entry-point pair. No source-code switch is required.
 
 ```bash
 export PROJECT_ROOT="$(pwd)"
-export LIBERO_ROOT="$PROJECT_ROOT/../LIBERO"          # standard LIBERO mode
-export LIBEROPLUS_ROOT="$PROJECT_ROOT/../LIBERO-plus" # LIBERO-plus mode
-export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/libero_config" # use liberoplus_config in vga_liberoplus
 export VGGT_ROOT="$PROJECT_ROOT/../vggt"              # only needed for a source checkout
 export VGGT_MODEL_PATH="facebook/VGGT-1B"             # or an existing local VGGT-1B directory
-export PROMPT_ENCODER_PATH="Alibaba-NLP/gte-Qwen2-1.5B-instruct" # LIBERO-plus mode
+
+# Standard LIBERO
+export LIBERO_ROOT="$PROJECT_ROOT/../LIBERO"
+export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/libero_config"
+
+# LIBERO-plus: use these instead of the two LIBERO variables above
+# export LIBEROPLUS_ROOT="$PROJECT_ROOT/../LIBERO-plus"
+# export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/liberoplus_config"
+# export PROMPT_ENCODER_PATH="Alibaba-NLP/gte-Qwen2-1.5B-instruct"
 ```
 
-`VGGT_MODEL_PATH` and `PROMPT_ENCODER_PATH` may be local directories. When they are Hugging Face IDs, the first run downloads them through the normal Hugging Face cache.
+Model paths may be local directories or Hugging Face IDs.
 
 ## Installation
 
-The commands below mirror the environments used for the experiments. `our_envs.txt` is a package snapshot for reference; it is not intended to replace the steps below as a lock file.
+The commands below reproduce the reference environments. `our_envs.txt` is provided as a package snapshot.
 
 ### 1. System prerequisites
 
@@ -116,7 +110,7 @@ pip install numpy==1.26.4
 
 ### 2. Install VGGT and this repository
 
-The VGGT wrapper imports the official VGGT package. Either install a source checkout or install the package from the checkout you already have:
+Install the official VGGT package and this repository:
 
 ```bash
 cd "$PROJECT_ROOT/.."
@@ -129,13 +123,13 @@ pip install packaging ninja
 ninja --version
 ```
 
-Flash-Attention is needed by the training path. The reference server uses 2.5.5:
+Install Flash-Attention 2.5.5:
 
 ```bash
 pip install "flash-attn==2.5.5" --no-build-isolation
 ```
 
-If compilation fails, download a wheel matching your Python, PyTorch, CUDA, and C++ ABI versions from the [Flash-Attention releases](https://github.com/Dao-AILab/flash-attention/releases), then install that wheel directly.
+If compilation fails, install a matching wheel from the [Flash-Attention releases](https://github.com/Dao-AILab/flash-attention/releases).
 
 ### 3. Install ordinary LIBERO (`vga_libero`)
 
@@ -146,9 +140,6 @@ cd "$PROJECT_ROOT/.."
 git clone https://github.com/Lifelong-Robot-Learning/LIBERO.git
 export LIBERO_ROOT="$PWD/LIBERO"
 
-# The upstream README lists a larger, pinned legacy environment. Keep the
-# project-wide PyTorch/Transformers versions above and install the simulator
-# dependencies used by this repository:
 pip install -e "$LIBERO_ROOT"
 
 cd "$PROJECT_ROOT"
@@ -163,9 +154,9 @@ python benchmark_scripts/download_libero_datasets.py --use-huggingface
 cd "$PROJECT_ROOT"
 ```
 
-The upstream `requirements.txt` and setup instructions remain the reference for a standalone LIBERO installation; do not install its legacy Torch 1.11 pin on top of the `vga_libero` environment.
+Use the upstream installation guide as the reference for standalone LIBERO. Keep the project-wide PyTorch version above.
 
-If the simulator reports an EGL error such as `eglQueryString`, install the system libraries used by the official simulator setup:
+For EGL errors, install:
 
 ```bash
 sudo apt-get update
@@ -174,7 +165,7 @@ sudo apt-get install -y libgl1-mesa-dev libegl1-mesa-dev libgles2-mesa-dev libgl
 
 ### 4. Create the LIBERO-plus environment (`vga_liberoplus`)
 
-Start from the working ordinary-LIBERO environment. LIBERO-plus replaces the `libero` Python package, so keeping a cloned environment avoids dependency conflicts:
+Clone the working LIBERO environment. LIBERO-plus replaces the `libero` package:
 
 ```bash
 conda create -n vga_liberoplus --clone vga_libero
@@ -198,7 +189,7 @@ sudo apt-get install -y libexpat1 libfontconfig1-dev libpython3-stdlib libmagick
 
 ### 5. Keep a separate simulator configuration for each mode
 
-Both upstream packages support `LIBERO_CONFIG_PATH` (a directory containing `config.yaml`). Create two configuration directories once, then select the appropriate directory along with the environment. This avoids editing the shared `~/.libero/config.yaml` each time you switch modes.
+Create one `config.yaml` directory per mode and select it with `LIBERO_CONFIG_PATH`.
 
 ```bash
 python - <<'PYCONFIG'
@@ -223,7 +214,7 @@ for mode, variable in (("libero", "LIBERO_ROOT"), ("liberoplus", "LIBEROPLUS_ROO
 PYCONFIG
 ```
 
-For standard LIBERO use `export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/libero_config"`; for LIBERO-plus use `export LIBERO_CONFIG_PATH="$PROJECT_ROOT/data/liberoplus_config"`. Always set it **before** importing `libero` or starting an evaluator. Setting `LIBERO_ROOT`/`LIBEROPLUS_ROOT` chooses the Python source checkout; setting `LIBERO_CONFIG_PATH` chooses the assets, BDDL, and initial-state paths. Both must refer to the same mode.
+Use `data/libero_config` with `vga_libero` and `data/liberoplus_config` with `vga_liberoplus`. Set the variable before importing `libero` or starting an evaluator.
 
 ### 6. Verify the installation
 
@@ -254,7 +245,7 @@ git lfs install
 git clone https://huggingface.co/datasets/openvla/modified_libero_rlds data/libero
 ```
 
-The directory passed to `--data_root_dir` must contain the dataset directories directly:
+`--data_root_dir` must contain the dataset directories directly:
 
 ```text
 data/libero/
@@ -264,11 +255,11 @@ data/libero/
 └── libero_10_no_noops/1.0.0/
 ```
 
-If the download creates an extra `modified_libero_rlds/` directory, either move its contents into `data/libero/` or pass the parent directory that contains the four dataset directories. The `--task_suite` value in training (`spatial`, `object`, `goal`, or `10`) selects the corresponding RLDS dataset automatically.
+If the download creates an extra `modified_libero_rlds/` directory, move its contents into `data/libero/` or pass its parent directory. `--task_suite` selects the dataset.
 
 ### LIBERO-plus assets
 
-LIBERO-plus uses the ordinary LIBERO task suites with additional environment perturbations. Download its assets from the [LIBERO-plus dataset page](https://huggingface.co/datasets/Sylvest/LIBERO-plus/tree/main) and unpack them under:
+LIBERO-plus adds evaluation conditions to the ordinary LIBERO suites. Download its assets from the [LIBERO-plus dataset page](https://huggingface.co/datasets/Sylvest/LIBERO-plus/tree/main) and unpack them under:
 
 ```text
 $LIBEROPLUS_ROOT/libero/libero/assets/
@@ -281,11 +272,11 @@ $LIBEROPLUS_ROOT/libero/libero/assets/
 └── ...
 ```
 
-The training RLDS files remain the ordinary LIBERO files; LIBERO-plus changes the evaluation environment and task classification.
+Training uses the ordinary LIBERO RLDS files; LIBERO-plus changes the evaluation environment and task classification.
 
 ## Pretrained models
 
-The following models are not committed to Git because of their size.
+The following large models are not committed to Git.
 
 1. **Prismatic VLM base model**
 
@@ -297,9 +288,9 @@ The following models are not committed to Git because of their size.
      --local-dir pretrained_models/prism-qwen25-extra-dinosiglip-224px-0_5b
    ```
 
-   The checked-in `pretrained_models/configs/` files provide the project-specific OpenVLA configuration and processor metadata used by both training scripts. Model weights stay in the downloaded base-model directory; no model weights need to be committed to this repository.
+   The checked-in `pretrained_models/configs/` files provide the configuration and processor metadata used by both training scripts.
 
-   The Prismatic loader also resolves the Qwen2.5-0.5B tokenizer/config from [Qwen/Qwen2.5-0.5B](https://huggingface.co/Qwen/Qwen2.5-0.5B). Make sure the machine can reach Hugging Face, or pre-cache that repository before starting training.
+   The loader also needs the Qwen2.5-0.5B tokenizer/config.
 
 2. **VGGT-1B**
 
@@ -319,22 +310,22 @@ The following models are not committed to Git because of their size.
    export PROMPT_ENCODER_PATH="Alibaba-NLP/gte-Qwen2-1.5B-instruct"
    ```
 
-   The prompt cache is generated per suite at `data/libero_<suite>_prompt_cache.pt`. Keep the encoder path and the checkpoint's recorded GTE dimensions consistent when evaluating.
+   The prompt cache is generated at `data/libero_<suite>_prompt_cache.pt`.
 
 ## Training
 
-The checked-in `run_libero.sh` and `run_liberoplus.sh` files are complete experiment templates. The suffix identifies the simulator mode: `_libero` is for ordinary LIBERO and `_liberoplus` is for LIBERO-plus. The LIBERO recipe does not enable visual-token perturbation or pass any perturbation probability. The plus recipe explicitly enables the perturbation settings used by the LIBERO-plus experiments. Both use four GPUs by default, so edit `CUDA_VISIBLE_DEVICES`, batch size, save frequency, and the suite before launching a long run.
+`run_libero.sh` and `run_liberoplus.sh` are complete training templates. The suffix selects the simulator mode. Both use four GPUs by default.
 
 The shared training settings are summarized below; the shell scripts remain the authoritative source for the full command line.
 
 | Mode | GPUs | Batch / GPU | Gradient accumulation | Effective batch | Initial LR | LoRA rank | Save frequency |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| LIBERO | 4 (`4,5,6,7`) | 16 | 1 | 64 | `2e-4` | 64 | 2k |
-| LIBERO-plus | 4 (`0,1,2,3`) | 16 | 1 | 64 | `2e-4` | 64 | 5k |
+| LIBERO | 4 | 16 | 1 | 64 | `2e-4` | 64 | 2k |
+| LIBERO-plus | 4 | 16 | 1 | 64 | `2e-4` | 64 | 5k |
 
-Both recipes use two input images, proprioception, LoRA fine-tuning, merged LoRA checkpoints, and the Pro action head. The plus recipe additionally enables GTE and visual-token perturbation. See [`run_libero.sh`](run_libero.sh) and [`run_liberoplus.sh`](run_liberoplus.sh) before changing any experiment setting.
+Both recipes use two images, proprioception, LoRA fine-tuning, merged checkpoints, and the Pro action head. LIBERO-plus also uses GTE. See the scripts for the complete command lines.
 
-The paper reports these experiments on NVIDIA A100-SXM4-80GB GPUs. The scripts expose `CUDA_VISIBLE_DEVICES`, so the same recipes can be adapted to another multi-GPU machine after checking memory and CUDA compatibility.
+The experiments use NVIDIA A100-SXM4-80GB GPUs. Adjust `CUDA_VISIBLE_DEVICES` for other machines.
 
 ### Standard LIBERO
 
@@ -346,20 +337,20 @@ export VGGT_MODEL_PATH="facebook/VGGT-1B"
 bash run_libero.sh
 ```
 
-The standard recipe sets the suite in `--task_suite`. Change it to `spatial`, `object`, `goal`, or `10`. The training script generates the run directory name from the suite, mode, and training settings; no experiment-version selector is required. The output layout is:
+Set `--task_suite` to `spatial`, `object`, `goal`, or `10`. Checkpoints are saved as:
 
 ```text
 outputs/<suite>/<run>/training_args.json
 outputs/<suite>/<run>--<step>_chkpt/
 ```
 
-For example, the default LIBERO recipe writes step checkpoints under `outputs/goal/goal_libero+b16+lr-0.0002+lora-r64+dropout-0.0+image_aug--<step>_chkpt/`. The `b` value is the per-GPU batch size multiplied by gradient accumulation; multiply it by the number of GPUs for the total batch size. LIBERO-plus run names include `liberoplus`, so the two modes use separate output directories. When resuming with `--resume True --resum_vla_path <checkpoint> --resume_step <step>`, the run name is recovered from the checkpoint path, including older experiment names. Running the same recipe again uses the same output directory; archive an earlier run before starting over if you need to retain it.
+For staged training, resume with `--resume True --resum_vla_path <checkpoint> --resume_step <step>`. The run name is recovered from the checkpoint path.
 
-The LIBERO entry keeps its BOS-offset multimodal token layout (`--model_mode libero`). The LIBERO-plus entry switches to the GTE prompt path and its no-BOS layout (`--model_mode liberoplus`). The selected mode is saved in `training_args.json` and restored by the evaluator, so evaluation does not depend on the current shell command alone. `--use_pro_version` selects the action-head behavior and is unrelated to experiment naming.
+`model_mode=libero` and `model_mode=liberoplus` are saved in `training_args.json` and restored by the evaluator.
 
-#### BOS-token compatibility note
+#### BOS-token compatibility
 
-The two model modes intentionally keep different multimodal token layouts. In the original LIBERO experiments, the BOS token was handled incorrectly when visual tokens were inserted; the public LIBERO entry preserves that behavior because the corresponding checkpoints were trained with it. LIBERO-plus fixes the insertion order and uses the corrected BOS handling, which we believe is the more principled implementation. We did not rerun the standard LIBERO experiments with the corrected layout, so the reported LIBERO numbers and any future LIBERO weights remain tied to the historical behavior.
+LIBERO checkpoints use the historical BOS-offset layout. LIBERO-plus uses the corrected image-first layout. We did not rerun LIBERO with the corrected layout, so the reported LIBERO results and weights remain tied to the historical implementation.
 
 ### LIBERO-plus recipe
 
@@ -372,31 +363,28 @@ export PROMPT_ENCODER_PATH="Alibaba-NLP/gte-Qwen2-1.5B-instruct"
 bash run_liberoplus.sh
 ```
 
-The `run_liberoplus.sh` template enables the following options used by the recorded LIBERO-plus runs:
+The LIBERO-plus template uses GTE and the same image/proprioception settings as the reported runs:
 
 ```text
 --use_gte_encoder True
 --prompt_encoder_path $PROMPT_ENCODER_PATH
---use_visual_token_perturbation True
---visual_token_pert_prob 0.8
---visual_token_pert_full_shuffle_prob 0.1
 --num_images_in_input 2
 --use_proprio True
 ```
 
 `--use_lora True` trains a LoRA adapter and `--merge_lora_during_training True` also writes a merged model into the checkpoint. Set `--use_lora False --use_fz True` for the full/frozen variant. Each run stores `training_args.json`, including the selected mode (`libero` or `liberoplus`) and any GTE dimensions needed by the evaluator.
 
-For a smaller GPU, reduce `--batch_size`, increase `--grad_accumulation_steps` to preserve the effective batch size, and lower `--lora_rank` only if memory is still insufficient. The VGGT path is memory-heavy, so start with one GPU and a short `--max_steps` to validate the configuration before launching distributed training.
+For smaller GPUs, reduce `--batch_size` and increase `--grad_accumulation_steps` to preserve the effective batch size.
 
 ## Evaluation
 
-Evaluation scripts expect the original training output layout: `outputs/<suite>/<run>/training_args.json` plus the sibling `outputs/<suite>/<run>--<step>_chkpt/` directory containing `full_vla_model.bin`, processor files, the action head, and the saved projectors. Keep the run metadata beside the step checkpoint when copying a checkpoint to another machine. Results are written under `experiments/logs/`; rollout videos are written under `rollouts/`.
+Evaluation expects `training_args.json` beside the step checkpoint under `outputs/<suite>/`. Results are written under `experiments/logs/`; videos are written under `rollouts/`.
 
-Both evaluators read the saved model mode and `use_gte_encoder` from `training_args.json`. A non-GTE checkpoint can be evaluated in either benchmark without a prompt encoder. For a GTE checkpoint, supply `--prompt_encoder_path "$PROMPT_ENCODER_PATH"` in either evaluator. The optional Adapt3R evaluator does not initialize GTE; use `run_libero_eval.py` for standard LIBERO evaluation of a GTE checkpoint. Visual-token perturbation applies during training and is disabled by the model in evaluation mode.
+Both evaluators read the saved mode and GTE settings from `training_args.json`. For a GTE checkpoint, provide `--prompt_encoder_path "$PROMPT_ENCODER_PATH"`.
 
 ### Ordinary LIBERO
 
-The supported entry point is `eval_libero.sh`; it uses the same standard LIBERO evaluator and command as the released ordinary-LIBERO recipe. Edit its checkpoint path when needed, then run all tasks in a suite with the default 50 trials per task:
+Use `eval_libero.sh` and edit its checkpoint path and suite when needed:
 
 ```bash
 conda activate vga_libero
@@ -416,8 +404,6 @@ $CONDA_PREFIX/bin/python experiments/robot/libero/run_libero_eval.py \
   --num_images_in_input 2 \
   --num_trials_per_task 50
 ```
-
-`eval_libero.sh` is the standard LIBERO evaluation entry and matches the released ordinary-LIBERO evaluator command.
 
 ### LIBERO-plus
 
@@ -458,13 +444,13 @@ Sensor Noise
 Objects Layout
 ```
 
-The recorded runs use one trial per perturbation task. To evaluate a complete suite without category filtering, omit `--task_category`; this is a longer run and uses the number of trials set by `--num_trials_per_task`.
+The reported runs use one trial per category. Omit `--task_category` to evaluate the complete suite.
 
-The evaluation examples retain historical checkpoint names from the recorded experiments. For a newly trained model, replace `--pretrained_checkpoint` in the corresponding evaluation script with the generated step-checkpoint directory shown during training, and set `--task_suite_name` to match its suite. Older checkpoints can still be evaluated without renaming their directories.
+For a new run, replace `--pretrained_checkpoint` and set `--task_suite_name` to the matching suite.
 
 ## Reproducing the reported results
 
-The commands in `run_libero.sh` and `run_liberoplus.sh` are full recipes. They use four GPUs, LoRA rank 64, per-GPU batch size 16, gradient accumulation 1 (effective batch size 64), and an initial learning rate of `2e-4`. The LIBERO-plus recipe also enables the GTE prompt encoder and visual-token perturbation. See the scripts for the complete argument list, model paths, save frequency, and perturbation settings. The final schedule is also kept in [`result_summary.md`](result_summary.md).
+The reported runs use four GPUs, batch size 16 per GPU, gradient accumulation 1 (effective batch size 64), LoRA rank 64, and initial learning rate `2e-4`. See the scripts for the complete settings.
 
 ### Standard LIBERO schedule
 
@@ -481,7 +467,7 @@ For a one-stage run, edit `--task_suite`, `--learning_rate`, and `--max_steps` i
 
 ### LIBERO-plus schedule
 
-In the LIBERO-plus table below, the suffix (`50k`, `30k`, or `160k`) is the step of the checkpoint used for that row. These are the final release-reproduction results from `result_summary.md`, rather than the earlier exploratory log selection.
+The suffix (`50k`, `30k`, or `160k`) is the checkpoint step used for each row.
 
 | Suite / checkpoint | CV | RIS | LI | LC | BT | SN | OL | Avg |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -495,46 +481,60 @@ In the LIBERO-plus table below, the suffix (`50k`, `30k`, or `160k`) is the step
 
 ## Results and baseline comparison
 
-The tables below report success rates. LIBERO is copied from the paper's full baseline comparison. LIBERO-plus uses the final release-reproduction values above; the paper baseline rows are included only for the three perturbation dimensions reported there (light, language, and camera), so unreported cells are shown as `—`.
+The tables report success rates. Missing baseline entries are shown as `—`.
 
 ### LIBERO
 
-| Family | Method | Spatial | Object | Goal | Long | Avg |
-| --- | --- | ---: | ---: | ---: | ---: | ---: |
-| VLA | Octo | 78.9 | 85.7 | 84.6 | 51.1 | 75.1 |
-| VLA | OpenVLA | 84.7 | 88.4 | 79.2 | 53.7 | 76.5 |
-| VLA | GR00T-N1 | 94.4 | 97.6 | 93.0 | 90.6 | 93.9 |
-| VLA | UniVLA | 96.5 | 96.8 | 95.6 | 92.0 | 95.2 |
-| VLA | π0 | 90.0 | 86.0 | 95.0 | 73.0 | 86.0 |
-| VLA | π0.5 | 98.8 | 98.2 | 98.0 | 92.4 | 96.9 |
-| VLA | GR00T-N1.6 | 97.7 | 98.5 | 97.5 | 94.4 | 97.0 |
-| VLA | OpenVLA-OFT | 97.6 | 98.4 | 97.9 | 94.5 | 97.1 |
-| VLA | VLA-Thinker | 98.7 | 99.0 | 95.2 | 96.9 | 97.5 |
-| 3D-VLA | SpatialVLA | 88.2 | 89.9 | 78.6 | 55.5 | 78.1 |
-| 3D-VLA | GeoAwareVLA | 95.0 | 100.0 | 99.0 | 93.0 | 96.8 |
-| 3D-VLA | GeoVLA | 98.4 | 99.0 | 96.6 | 96.6 | 97.7 |
-| WAM | UniMimic | 89.0 | 91.0 | 85.0 | 59.0 | 81.0 |
-| WAM | WorldVLA | 87.6 | 96.2 | 83.4 | 60.0 | 81.8 |
-| WAM | UVA | — | — | — | 93.0 | 93.0 |
-| WAM | mimic-video | 94.2 | 96.8 | 90.6 | — | 93.9 |
-| WAM | Motus | 96.8 | 99.8 | 96.6 | 97.6 | 97.7 |
-| Ours | **VGA** | **99.0** | **99.6** | **98.6** | **95.0** | **98.1** |
+
+<table>
+<thead>
+<tr><th>Method</th><th>Spatial</th><th>Object</th><th>Goal</th><th>Long</th><th>Avg</th></tr>
+</thead>
+<tbody>
+<tr><th colspan="6" align="left">Vision-Language-Action baselines</th></tr>
+<tr><td>Octo</td><td>78.9</td><td>85.7</td><td>84.6</td><td>51.1</td><td>75.1</td></tr>
+<tr><td>OpenVLA</td><td>84.7</td><td>88.4</td><td>79.2</td><td>53.7</td><td>76.5</td></tr>
+<tr><td>GR00T-N1</td><td>94.4</td><td>97.6</td><td>93.0</td><td>90.6</td><td>93.9</td></tr>
+<tr><td>UniVLA</td><td>96.5</td><td>96.8</td><td>95.6</td><td>92.0</td><td>95.2</td></tr>
+<tr><td>π<sub>0</sub></td><td>90.0</td><td>86.0</td><td>95.0</td><td>73.0</td><td>86.0</td></tr>
+<tr><td>π<sub>0.5</sub></td><td>98.8</td><td>98.2</td><td>98.0</td><td>92.4</td><td>96.9</td></tr>
+<tr><td>GR00T-N1.6</td><td>97.7</td><td>98.5</td><td>97.5</td><td>94.4</td><td>97.0</td></tr>
+<tr><td>OpenVLA-OFT</td><td>97.6</td><td>98.4</td><td>97.9</td><td>94.5</td><td>97.1</td></tr>
+<tr><td>VLA-Thinker</td><td>98.7</td><td>99.0</td><td>95.2</td><td>96.9</td><td>97.5</td></tr>
+<tr><th colspan="6" align="left">3D-VLA baselines</th></tr>
+<tr><td>SpatialVLA</td><td>88.2</td><td>89.9</td><td>78.6</td><td>55.5</td><td>78.1</td></tr>
+<tr><td>GeoAwareVLA</td><td>95.0</td><td>100.0</td><td>99.0</td><td>93.0</td><td>96.8</td></tr>
+<tr><td>GeoVLA</td><td>98.4</td><td>99.0</td><td>96.6</td><td>96.6</td><td>97.7</td></tr>
+<tr><th colspan="6" align="left">World-Action-Model baselines</th></tr>
+<tr><td>UniMimic</td><td>89.0</td><td>91.0</td><td>85.0</td><td>59.0</td><td>81.0</td></tr>
+<tr><td>WorldVLA</td><td>87.6</td><td>96.2</td><td>83.4</td><td>60.0</td><td>81.8</td></tr>
+<tr><td>UVA</td><td>—</td><td>—</td><td>—</td><td>93.0</td><td>93.0</td></tr>
+<tr><td>mimic-video</td><td>94.2</td><td>96.8</td><td>90.6</td><td>—</td><td>93.9</td></tr>
+<tr><td>Motus</td><td>96.8</td><td>99.8</td><td>96.6</td><td>97.6</td><td>97.7</td></tr>
+<tr><th colspan="6" align="left">Ours</th></tr>
+<tr><td><strong>VGA</strong></td><td><strong>99.0</strong></td><td><strong>99.6</strong></td><td><strong>98.6</strong></td><td><strong>95.0</strong></td><td><strong>98.1</strong></td></tr>
+</tbody>
+</table>
 
 ### LIBERO-plus
 
-| Method / checkpoint | CV | RIS | LI | LC | BT | SN | OL | Avg |
+| Method / checkpoint | Camera | Robot | Language | Light | Background | Noise | Layout | Avg |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| OpenVLA | 0.8 | 3.5 | 23.0 | 8.1 | 34.8 | 15.2 | 28.5 | 15.6 |
+| OpenVLA-OFT | 56.4 | 31.9 | 79.5 | 88.7 | 93.3 | 75.8 | 74.2 | 69.6 |
+| OpenVLA-OFT<sub>w</sub> | 10.4 | 38.7 | 70.5 | 76.8 | 93.6 | 49.9 | 69.9 | 55.8 |
+| NORA | 2.2 | 37.0 | 65.1 | 45.7 | 58.6 | 12.8 | 62.1 | 39.0 |
+| WorldVLA | 0.1 | 27.9 | 41.6 | 43.7 | 17.1 | 10.9 | 38.0 | 25.0 |
+| UniVLA | 1.8 | 46.2 | 69.6 | 69.0 | 81.0 | 21.2 | 31.9 | 43.9 |
+| π<sub>0</sub> | 13.8 | 6.0 | 58.8 | 85.0 | 81.4 | 79.0 | 68.9 | 53.6 |
+| π<sub>0</sub>-Fast | 65.1 | 21.6 | 61.0 | 73.2 | 73.2 | 74.4 | 68.8 | 61.6 |
+| RIPT-VLA | 55.2 | 31.2 | 77.6 | 88.4 | 91.6 | 73.5 | 74.2 | 68.4 |
+| OpenVLA-OFT<sub>m</sub> | 55.6 | 21.7 | 81.0 | 92.7 | 91.0 | 78.6 | 68.7 | 67.9 |
 | **VGA · Spatial 50k** | **94.4** | **56.9** | **86.9** | **93.5** | **84.5** | **93.2** | **93.8** | **86.2** |
 | **VGA · Object 30k** | **97.5** | **32.9** | **95.8** | **97.0** | **84.7** | **98.1** | **68.2** | **82.0** |
 | **VGA · Goal 30k** | **88.0** | **27.9** | **41.0** | **86.4** | **60.5** | **91.8** | **63.1** | **65.5** |
 | **VGA · Long 160k** | **65.4** | **42.7** | **96.1** | **86.5** | **45.0** | **76.2** | **67.6** | **68.5** |
-| OpenVLA-OFT (paper) | 59.7 | — | 81.5 | 85.8 | — | — | — | — |
-| π0 (paper) | 15.8 | — | 61.0 | 79.6 | — | — | — | — |
-| WorldVLA (paper) | 0.3 | — | 44.2 | 29.4 | — | — | — | — |
-| UniVLA (paper) | 4.3 | — | 71.8 | 59.1 | — | — | — | — |
-| RIPT-VLA (paper) | 58.3 | — | 80.1 | 87.9 | — | — | — | — |
-
-The LIBERO-plus baseline rows follow the paper's column order of camera, language, and light; they are not recomputed as seven-category averages. The release-reproduction rows are the values to use when checking this repository.
+| **VGA · Average** | **86.3** | **40.1** | **80.0** | **90.9** | **68.7** | **89.8** | **73.2** | **75.6** |
 
 ## Troubleshooting
 
