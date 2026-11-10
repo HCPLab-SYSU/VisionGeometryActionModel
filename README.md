@@ -556,7 +556,7 @@ If you find VGA useful, please cite:
 
 ```bibtex
 @article{song2026robotic,
-  title   = {Robotic manipulation is vision-to-geometry mapping (f(v) \rightarrow G): Vision-geometry backbones over language and video models},
+  title   = {Robotic Manipulation is Vision-to-Geometry Mapping ($ f (v) \rightarrow G $): Vision-Geometry Backbones over Language and Video Models},
   author  = {Song, Zijian and Li, Qichang and Zhou, Jiawei and Yuan, Zhenlong and Chen, Tianshui and Lin, Liang and Wang, Guangrun},
   journal = {arXiv preprint arXiv:2604.12908},
   year    = {2026}
