@@ -555,10 +555,11 @@ We thank the authors of [VLA-Adapter](https://github.com/OpenHelix-Team/VLA-Adap
 If you find VGA useful, please cite:
 
 ```bibtex
-@article{song2026robotic,
-  title   = {Robotic Manipulation is Vision-to-Geometry Mapping ($ f (v) \rightarrow G $): Vision-Geometry Backbones over Language and Video Models},
-  author  = {Song, Zijian and Li, Qichang and Zhou, Jiawei and Yuan, Zhenlong and Chen, Tianshui and Lin, Liang and Wang, Guangrun},
-  journal = {arXiv preprint arXiv:2604.12908},
-  year    = {2026}
+@inproceedings{song2026robotic,
+  title={Robotic Manipulation is Vision-to-Geometry Mapping: Vision-Geometry Backbones over Language and Video Models},
+  author={Song, Zijian and Li, Qichang and Zhou, Jiawei and Yuan, Zhenlong and Chen, Tianshui and Lin, Liang and Wang, Guangrun},
+  booktitle={Proceedings of the 34th ACM International Conference on Multimedia},
+  pages={9088--9097},
+  year={2026}
 }
 ```
